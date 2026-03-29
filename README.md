@@ -1,5 +1,11 @@
 # BMAD
 
+## Documents
+
+- `README.md` — tổng quan BMAD
+- `BMAD_DECISION_MATRIX.md` — khi nào nên dùng no BMAD / BMAD-lite / full BMAD
+- `BMAD_BROWNFIELD_ONBOARDING.md` — onboarding brownfield project và reverse-documentation cho feature/module cũ
+
 ## A. Core idea
 
 - BMAD không chỉ là prompting.
