@@ -6,6 +6,7 @@
 - `BMAD_DECISION_MATRIX.md` — khi nào nên dùng no BMAD / BMAD-lite / full BMAD
 - `BMAD_BROWNFIELD_ONBOARDING.md` — onboarding brownfield project và reverse-documentation cho feature/module cũ
 - `BMAD_BROWNFIELD_DOCUMENT_TAXONOMY.md` — taxonomy document và command table cho brownfield documentation thiên về hiểu hệ thống/domain
+- `BMAD_AGILE_MAPPING.md` — mapping ngắn gọn giữa Agile process và BMAD method, kèm BMAD commands gợi ý
 
 ## A. Core idea
 
@@ -306,24 +307,4 @@ Flow:
 - Agent không chỉ là system prompt.
 - Khi chưa hiểu lĩnh vực, hãy tìm cái bất biến của nó.
 
-## P. Agile process ↔ BMAD method mapping
-
-| Agile | BMAD | Ý nghĩa ngắn |
-|---|---|---|
-| Product vision / Product goal | Business framing | Xác định vấn đề, mục tiêu, scope |
-| Epic / User story | Requirement / domain modeling | Chuyển nhu cầu thành capability, rule, concept |
-| Backlog refinement | Business + model refinement | Làm rõ rule, cắt nhỏ, ưu tiên |
-| Sprint planning | Delivery planning | Chốt scope iteration, dependency, hướng triển khai |
-| Technical design / spike | Architecture design | Làm rõ solution, boundary, interface, risk |
-| Development | Build / delivery | Implement feature và artifact liên quan |
-| QA / testing | Validation | Kiểm tra correctness, behavior, acceptance |
-| Sprint review / demo | Delivery review | Nhận feedback từ stakeholder trên increment |
-| Retrospective | Method refinement | Cải tiến workflow, assumption, quality loop |
-| Release / rollout | Delivery / adoption | Đưa value ra production và theo dõi outcome |
-
-### Ghi nhớ nhanh
-
-- **Agile** = nhịp làm việc, feedback loop, cách team vận hành.
-- **BMAD** = khung tư duy và delivery discipline để làm rõ context, planning, design, verification.
-- Thực tế tốt nhất: **chạy BMAD bên trong Agile**, không thay Agile bằng BMAD.
 
