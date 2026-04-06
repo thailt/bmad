@@ -2,12 +2,12 @@
 
 ## Mục tiêu
 
-Tài liệu này mô tả cách dùng BMAD để **onboard vào một brownfield project** và tạo ra **document as-is** cho các chức năng đã tồn tại.
+Tài liệu này mô tả cách dùng BMAD để **onboard vào một brownfield project** và tạo ra **as-is documents** cho feature, module, và workflow đã tồn tại.
 
 Brownfield onboarding không bắt đầu bằng thiết kế mới.
-Nó bắt đầu bằng việc **reconstruct reality** từ code, schema, contract, behavior đang chạy, và knowledge của team.
+Nó bắt đầu bằng việc **reconstruct reality** từ code, schema, contract, runtime behavior, và knowledge của team.
 
-BMAD ở đây được dùng như một **operating workflow để hiểu hệ thống cũ có cấu trúc**, không phải để bịa ra tài liệu đẹp nhưng sai.
+BMAD ở đây được dùng như một **operating workflow để hiểu hệ thống cũ có cấu trúc**, không phải để tạo ra tài liệu đẹp nhưng sai trạng thái thật.
 
 ---
 
@@ -18,11 +18,11 @@ BMAD ở đây được dùng như một **operating workflow để hiểu hệ 
 Không phải:
 - đọc hết repo
 - viết tài liệu tổng quát quá sớm
-- cố hiểu mọi thứ trước khi làm gì
+- cố hiểu mọi thứ trước khi chạm vào một feature thật
 
 Mà là:
 - hiểu đủ để làm việc an toàn
-- xác định được feature/module nào liên quan
+- xác định đúng feature/module/workflow cần đào
 - tái dựng behavior hiện tại của hệ thống
 - chưng cất understanding thành artifact có thể search, review, handoff
 
@@ -33,13 +33,13 @@ Thông tin thật thường nằm rải ra ở:
 - database schema
 - API contracts
 - event definitions
-- configs / feature flags
+- config / feature flags
 - tests
 - logs / monitoring
-- tribal knowledge từ dev/domain owner
+- tribal knowledge từ dev hoặc domain owner
 
 Vì vậy onboarding brownfield phải luôn phân biệt:
-- **Fact**: thấy rõ từ code/schema/runtime
+- **Fact**: thấy rõ từ code, schema, runtime, hoặc tài liệu đáng tin
 - **Inference**: suy luận hợp lý từ evidence
 - **Unknown**: chưa đủ bằng chứng để kết luận
 
@@ -57,14 +57,14 @@ Vì vậy onboarding brownfield phải luôn phân biệt:
 
 Dùng khi:
 - mới vào một repo cũ
-- phải hiểu chức năng đã có sẵn
+- phải hiểu một chức năng đã có sẵn
 - cần document hóa feature cũ để handoff / review / maintain
 - cần giảm phụ thuộc vào knowledge trong đầu một vài người
 - chuẩn bị refactor nhưng chưa hiểu hiện trạng
 
 Không dùng full flow này khi:
 - task chỉ là fix rất nhỏ, local, rollback dễ
-- chỉ cần tìm nhanh một bug đã biết rõ vùng ảnh hưởng
+- chỉ cần tìm nhanh một bug đã rõ vùng ảnh hưởng
 
 ---
 
@@ -73,14 +73,14 @@ Không dùng full flow này khi:
 ```text
 0. Orient
 1. Cheap repo scan
-2. Choose feature or module slice
+2. Choose a slice
 3. Pattern scan
 4. Deep read relevant paths
 5. Reconstruct actual behavior
 6. Extract business rules and invariants
-7. Write as-is documents
+7. Write as-is artifacts
 8. Review gaps and unknowns
-9. Expand into higher-level artifacts if needed
+9. Expand upward if needed
 ```
 
 ---
@@ -92,17 +92,17 @@ Không dùng full flow này khi:
 ### Goal
 Hiểu BMAD nên dùng ở mức nào, và xác định task là **onboarding / reverse-documentation**, không phải greenfield design.
 
-### Output
+### Expected output
 - onboarding scope ngắn
 - level of BMAD cần dùng
-- initial hypothesis về feature/module cần đào
+- initial hypothesis về feature/module/workflow cần đào
 
 ### Suggested command
 ```text
 bmad-help
 ```
 
-### How to use
+### Usage note
 - nêu rõ đây là brownfield project
 - nói mục tiêu là tạo tài liệu **as-is**
 - yêu cầu workflow thiên về discovery hơn là implementation
@@ -110,7 +110,7 @@ bmad-help
 ### Prompt shape
 ```text
 Tôi đang onboard vào một brownfield project.
-Mục tiêu là reconstruct tài liệu as-is cho feature/module đã tồn tại,
+Mục tiêu là reconstruct tài liệu as-is cho feature/module/workflow đã tồn tại,
 không redesign vội.
 Hãy giúp tôi chọn mức BMAD phù hợp và flow discovery phù hợp.
 ```
@@ -130,10 +130,10 @@ Lấy **system shape sơ bộ** mà không đọc sâu toàn repo.
 - config directories
 - migrations / schema
 - API specs
-- message/event definitions
+- message / event definitions
 - deployment manifests nếu cần
 
-### Output
+### Expected output
 - repo map ngắn
 - suspected entry points
 - suspected hot modules
@@ -144,8 +144,8 @@ Lấy **system shape sơ bộ** mà không đọc sâu toàn repo.
 bmad-quick-dev
 ```
 
-### Why `bmad-quick-dev`?
-Vì ở bước này cần tốc độ, discovery có định hướng, chưa cần full planning chain.
+### Why this command?
+Ở bước này cần discovery có định hướng, chưa cần full planning chain.
 
 ### Prompt shape
 ```text
@@ -162,13 +162,13 @@ Output ngắn gọn, tách fact và inference.
 
 ---
 
-## Step 2. Choose a Feature or Module Slice
+## Step 2. Choose a Slice
 
 ### Goal
 Không onboard bằng cách hiểu “cả hệ thống” một lần.
 Phải chọn một **slice** cụ thể:
 - 1 feature
-- hoặc 1 workflow
+- 1 workflow
 - hoặc 1 bounded module
 
 ### Good slice examples
@@ -178,7 +178,7 @@ Phải chọn một **slice** cụ thể:
 - payment callback handling
 - notification dispatch
 
-### Output
+### Expected output
 - chosen slice
 - boundaries ban đầu
 - success criteria cho tài liệu sẽ tạo
@@ -188,11 +188,11 @@ Phải chọn một **slice** cụ thể:
 bmad-product-brief
 ```
 
-### Why?
-Vì ở brownfield, “brief” không phải để phát minh requirement mới, mà để chốt:
+### Why this command?
+Trong brownfield, “brief” không phải để phát minh requirement mới, mà để chốt:
 - vấn đề đang muốn hiểu
 - scope hiểu đến đâu
-- ai là actor
+- actor nào liên quan
 - thành công của onboarding slice là gì
 
 ### Prompt shape
@@ -226,7 +226,7 @@ Tìm đúng vùng code cần đọc.
 - scheduler/job names
 - domain keywords
 
-### Output
+### Expected output
 - candidate files/classes
 - likely write paths
 - likely read paths
@@ -265,9 +265,9 @@ Tìm:
 6. failure handling
 7. tests nếu có
 
-### Output
+### Expected output
 - happy path
-- alternate path
+- alternate paths
 - validation rules
 - state changes
 - side effects
@@ -277,7 +277,7 @@ Tìm:
 bmad-create-prd
 ```
 
-### Why use `bmad-create-prd` here?
+### Why this command?
 Trong brownfield, có thể dùng command này như một cách tạo **functional understanding artifact** cho trạng thái hiện tại.
 Nó buộc ta phải làm rõ:
 - scope
@@ -317,8 +317,8 @@ Biến understanding chức năng thành technical map.
 - consistency expectations
 - failure points
 
-### Output
-- system shape text diagram
+### Expected output
+- system-shape text diagram
 - dependency notes
 - write/read ownership
 - risk points
@@ -357,10 +357,10 @@ Kiểm tra đã hiểu đủ để người khác làm việc tiếp chưa.
 - phần nào mới là inference chứ chưa phải fact?
 - có đủ để sửa/extend feature an toàn chưa?
 
-### Output
+### Expected output
 - readiness verdict
 - gap list
-- câu hỏi cần confirm với owner/domain expert
+- câu hỏi cần confirm với owner hoặc domain expert
 
 ### Suggested command
 ```text
@@ -383,7 +383,7 @@ Kiểm tra:
 ## Step 7. Create Final Brownfield Artifacts
 
 ### Goal
-Tách understanding thành các document dễ dùng cho onboarding.
+Tách understanding thành các artifact dễ dùng cho onboarding.
 
 ### Recommended artifacts
 ```text
@@ -399,8 +399,8 @@ docs/features/<feature-name>/
 bmad-create-story
 ```
 
-### Why use `bmad-create-story`?
-Không phải để code ngay, mà để chia hiểu biết thành **workable unit** hoặc artifact unit:
+### Why this command?
+Không phải để code ngay, mà để chia hiểu biết thành **artifact units**:
 - feature snapshot
 - as-is functional spec
 - technical notes
@@ -424,7 +424,7 @@ Mỗi artifact phải ngắn gọn, search-friendly, và tách rõ fact / assump
 
 ---
 
-## Step 8. Review Quality of the Documentation
+## Step 8. Review Documentation Quality
 
 ### Goal
 Đảm bảo doc không “nghe hay nhưng sai”.
@@ -461,7 +461,7 @@ Tập trung vào:
 ### Goal
 Sau khi có nhiều feature docs, mới tổng hợp dần lên level cao hơn.
 
-### Expand from feature docs to:
+### Expand from feature docs to
 - glossary
 - module map
 - context map
@@ -524,7 +524,7 @@ bmad-help
 Use when:
 - feature có mơ hồ vừa phải
 - chạm vài module
-- cần artifact có thể dùng cho onboarding thật
+- cần artifact đủ dùng cho onboarding thật
 
 ---
 
@@ -543,14 +543,14 @@ bmad-help
 ```
 
 Use when:
-- feature chạm contract/schema/event
+- feature chạm contract / schema / event
 - rollback khó
 - rất dễ hiểu sai domain rule
 - tài liệu sẽ được dùng cho refactor hoặc redesign tiếp theo
 
 ---
 
-## 6. Document Templates for Brownfield Onboarding
+## 6. Core Brownfield Artifacts
 
 ## 6.1 Feature Snapshot
 
@@ -616,9 +616,9 @@ Use when:
 
 ---
 
-## 7. Recommended Prompts
+## 7. Prompt Pack
 
-## Prompt 1 — Start discovery
+## Prompt 1 — Start Discovery
 
 ```text
 Tôi đang onboard vào một brownfield project.
@@ -628,7 +628,7 @@ Bắt đầu bằng cheap scan, pattern scan, rồi đề xuất vùng cần dee
 Tách rõ fact / inference / unknown.
 ```
 
-## Prompt 2 — Build functional understanding
+## Prompt 2 — Build Functional Understanding
 
 ```text
 Từ evidence đã tìm được, hãy tạo tài liệu Functional Spec (As-Is) cho feature `<feature-name>`.
@@ -637,17 +637,17 @@ Không ghi điều chưa có evidence như fact.
 Bao gồm actors, trigger, happy path, alternate flows, validation rules, side effects, data changes.
 ```
 
-## Prompt 3 — Build technical understanding
+## Prompt 3 — Build Technical Understanding
 
 ```text
 Hãy tạo Technical Notes dạng as-is cho feature `<feature-name>`.
 Mô tả text diagram, component interaction, source of truth, write/read path, sync-async dependencies, failure points, extension risks.
 ```
 
-## Prompt 4 — Review documentation quality
+## Prompt 4 — Review Documentation Quality
 
 ```text
-Hãy review bộ tài liệu brownfield onboarding cho feature `<feature-name>`.
+Hãy review bộ brownfield onboarding docs cho feature `<feature-name>`.
 Tìm edge cases bị thiếu, hidden assumptions, overclaim, mâu thuẫn giữa doc và code understanding.
 ```
 
@@ -699,3 +699,69 @@ Hậu quả:
 - BMAD giúp biến việc hiểu code cũ thành một workflow có cấu trúc.
 - Feature-level artifacts là điểm bắt đầu đúng.
 - Tài liệu as-is tốt sẽ giảm rework, giảm tribal knowledge, và làm refactor an toàn hơn.
+
+---
+
+## 11. Brownfield Workflow Reference Table
+
+Bảng này dùng như một **cheat sheet** khi chạy BMAD cho brownfield onboarding.
+Mục tiêu là nhìn nhanh được:
+- đang ở bước nào
+- nên dùng action/command gì
+- output mong đợi là gì
+- prompt nào nên dùng nếu cần
+
+| Workflow item | Action / Command | Meaning | Output | Command prompt nếu cần |
+|---|---|---|---|---|
+| 0. Orient | `bmad-help` | Xác định đây là **brownfield reverse-documentation**, không phải greenfield design | Scope ngắn, cách tiếp cận phù hợp, level BMAD cần dùng | `Tôi đang onboard vào một brownfield project. Mục tiêu là reconstruct tài liệu as-is cho feature/module/workflow đã tồn tại, không redesign vội. Hãy giúp tôi chọn mức BMAD phù hợp và flow discovery phù hợp.` |
+| 1. Cheap Repo Scan | `bmad-quick-dev` | Scan rẻ để lấy **system shape sơ bộ** mà không đọc sâu toàn repo | Repo map ngắn, entry points nghi ngờ, hot modules, glossary keywords ban đầu | `Hãy làm cheap scan cho repo này. Đừng đọc sâu toàn bộ codebase. Mục tiêu: (1) xác định cấu trúc repo (2) tìm entry points chính (3) tìm module/domain quan trọng (4) liệt kê keywords/business terms đáng chú ý (5) đề xuất lát cắt đầu tiên để đào sâu. Output ngắn gọn, tách fact và inference.` |
+| 2. Choose a Slice | `bmad-product-brief` | Chốt **1 feature / workflow / module** để đào, tránh ôm cả hệ thống | Brief cho feature: purpose, actors, in-scope/out-of-scope, expected artifacts | `Tạo brief cho brownfield feature <feature-name>. Mục tiêu không phải thiết kế mới mà là hiểu và document trạng thái hiện tại. Hãy chốt: business purpose, actors, in-scope/out-of-scope, entry points nghi ngờ, expected artifacts sau khi phân tích.` |
+| 3. Pattern Scan | `bmad-quick-dev` | Search trước khi deep read để tìm đúng vùng code | Candidate files/classes, write path, read path, integration path | `Hãy pattern scan feature <feature-name> trong repo. Tìm: entry points, service/use case liên quan, DB tables liên quan, events/messages liên quan, external dependencies. Đừng kết luận quá sớm; chỉ gom evidence và nhóm theo write path / read path / integration path.` |
+| 4. Deep Read Relevant Paths | `bmad-create-prd` | Đọc sâu các path liên quan để reconstruct behavior thật | Functional understanding draft: happy path, alternate flows, validation rules, side effects | `Từ evidence đã tìm được, hãy tạo tài liệu functional understanding cho feature <feature-name> theo trạng thái as-is. Bao gồm: goal, actors, triggers, happy path, alternate flows, validation rules, side effects, ambiguity log. Chỉ ghi điều có evidence. Chỗ chưa chắc để vào unknowns/assumptions.` |
+| 5. Reconstruct Technical Shape | `bmad-create-architecture` | Biến functional understanding thành **technical map as-is** | Text diagram, involved components, source of truth, write/read path, failure points, risks | `Tạo architecture note dạng as-is cho feature <feature-name>. Đây là brownfield reverse-documentation, không phải future-state design. Hãy mô tả: text diagram, involved components/modules, write path/read path, sync/async interactions, source of truth, failure points, extension risks.` |
+| 6. Validate Readiness of Understanding | `bmad-check-implementation-readiness` | Kiểm tra đã hiểu **đủ để sửa an toàn chưa** | Readiness verdict, gap list, unknowns, câu hỏi cần confirm | `Hãy review bộ tài liệu as-is cho feature <feature-name> và đánh giá readiness. Kiểm tra: chỗ nào đã là fact, chỗ nào mới là inference, chỗ nào còn unknown, thiếu gì để dev mới có thể sửa feature an toàn, câu hỏi nào cần confirm với domain owner.` |
+| 7. Create Final Brownfield Artifacts | `bmad-create-story` | Chia understanding thành các artifact onboarding/search-friendly | `Feature Snapshot`, `Functional Spec (As-Is)`, `Technical Notes`, `Open Questions and Gaps` | `Hãy chia kết quả reverse-documentation của feature <feature-name> thành các artifact onboarding cụ thể: (1) Feature Snapshot (2) Functional Spec (As-Is) (3) Technical Notes (4) Open Questions and Gaps. Mỗi artifact phải ngắn gọn, search-friendly, và tách rõ fact / assumption / unknown.` |
+| 8. Review Documentation Quality | `bmad-review-edge-case-hunter` / `bmad-review-adversarial-general` / `bmad-code-review` | Soát chất lượng doc để tránh “nghe hay nhưng sai” | Missing edge cases, hidden assumptions, overclaims, contradictions | `Hãy review bộ brownfield onboarding docs cho feature <feature-name>. Tập trung vào: missing edge cases, overclaimed conclusions, hidden assumptions, mâu thuẫn giữa functional doc và technical doc, các điểm có thể gây sai khi onboarding dev mới.` |
+| 9. Capture Lessons and Expand Upward | `bmad-retrospective` | Rút kinh nghiệm và tổng hợp từ feature-level lên module/system-level | Lessons learned, template improvements, glossary/module/context candidates | `Từ quá trình reverse-documentation feature <feature-name>, hãy capture lesson learned: phần nào khó hiểu nhất, knowledge gap ở đâu, nên bổ sung artifact nào cho lần sau, template nào nên chuẩn hóa cho các feature khác.` |
+
+---
+
+## 12. Artifact Usage Map
+
+Sau khi chạy workflow cho từng feature, nên dùng các artifact như sau.
+
+| Artifact | Dùng để làm gì trong BMAD | Khi nào nên tạo | Ghi chú |
+|---|---|---|---|
+| Feature Snapshot | Entry document để vào feature nhanh | Ngay sau khi hiểu feature ở mức cơ bản | Tốt cho onboarding và handoff |
+| Functional Spec (As-Is) | Khóa behavior hiện tại của hệ thống | Sau deep read và reconstruct behavior | Dùng làm baseline cho bug analysis, regression, change planning |
+| Technical Notes | Bản đồ kỹ thuật để sửa/refactor an toàn | Sau khi đã nắm write path/read path/source of truth | Nên ưu tiên ghi rõ transaction, side effects, failure points |
+| Open Questions and Gaps | Quản trị uncertainty, tránh overclaim | Song song với các artifact khác | Bắt buộc phải tách fact / inference / unknown |
+| Glossary | Chuẩn hóa ubiquitous language | Sau khi có vài feature docs | Tránh mỗi người hiểu domain một kiểu |
+| Module Map | Tổng hợp trách nhiệm thực tế của module | Khi có evidence từ nhiều feature | Dùng cho boundary analysis và ownership clarification |
+| Dependency Map | Thấy dependency thật và blast radius | Khi bắt đầu thấy pattern phụ thuộc lặp lại | Tách rõ sync vs async |
+| Architecture Overview (As-Is) | Nhìn macro system shape nhưng vẫn bám reality | Khi đã có đủ feature-level evidence | Không nên viết từ suy đoán |
+| Context Map Draft | Draft domain/context boundary từ evidence thật | Khi muốn nâng từ code understanding lên domain understanding | Chỉ nên làm sau khi đã có đủ feature docs |
+
+---
+
+## 13. Recommended Usage Order
+
+```text
+Per feature:
+Feature Snapshot
+→ Functional Spec (As-Is)
+→ Technical Notes
+→ Open Questions and Gaps
+
+Across multiple features:
+Glossary
+→ Module Map
+→ Dependency Map
+→ Architecture Overview (As-Is)
+→ Context Map Draft
+```
+
+Quy tắc:
+- **Feature docs = evidence**
+- **System-level docs = synthesis**
+- Chỉ nên tổng hợp lên architecture/context khi đã có đủ evidence từ nhiều feature thật.
