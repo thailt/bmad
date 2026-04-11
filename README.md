@@ -7,6 +7,7 @@
 - `BMAD_BROWNFIELD_ONBOARDING.md` — onboarding brownfield project và reverse-documentation cho feature/module cũ
 - `BMAD_BROWNFIELD_DOCUMENT_TAXONOMY.md` — taxonomy document và command table cho brownfield documentation thiên về hiểu hệ thống/domain
 - `BMAD_AGILE_MAPPING.md` — mapping ngắn gọn giữa Agile process và BMAD method, kèm BMAD commands gợi ý
+- `BMAD_AUDIO_WORKFLOW.md` — workflow `audio`: nhận yêu cầu text, generate audio bằng VoxCPM, copy sang BMad, commit và push
 
 ## A. Core idea
 
